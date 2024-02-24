@@ -25,7 +25,7 @@ def save_to_file(response):
 
 
 def getdata(url):
-    payload = {'api_key': 'c52bb0af37f8185b7950a05e932725fb', 'url': url, 'keep_headers': 'true'}
+    payload = {'api_key': 'api_key', 'url': url, 'keep_headers': 'true'}
 
     for i in range(5):
         r = requests.get('http://api.scraperapi.com', params=payload, headers=headers, timeout=60)
