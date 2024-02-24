@@ -1,12 +1,25 @@
 # Exploring Residential Environmental Data in the United States with a Focus on Floor Types
 
+
 ## Project Overview
 
 The vacuum cleaner industry is heavily influenced by the residential environment, particularly the types of flooring found in homes. This research aimed to investigate trends in floor types in US households to support new product planning and development.
 
 I implemented and executed ETL processes to significantly increase data collection efficiency, reducing costs by replacing automation tools with human labor, including at the managerial level. The data were extracted from Zillow, the most visited real estate website in the United States.
 
-<img width="817" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/f1bb1f1d-5a8a-4f8d-9494-c9381a040847">
+<img width="680" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/07679d7f-d905-4cbe-b3ec-b6dcacdcadf6">
+
+<img width="335" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/b65de0a7-902b-433c-9a61-543752f16e2b">
+<img width="340" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8d309a94-452f-44a6-bece-79eb2aacbf9e">
+
+
+
+![image](https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/1cd282c7-fa79-46f3-876b-da260521d9ad)
+![image](https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/9a1d74e5-4cb0-4b5e-925d-ae1f104c2bbe)
+
+
+
+
 
 ## Technologies
 
@@ -18,11 +31,14 @@ I implemented and executed ETL processes to significantly increase data collecti
 - Plotly
 - AWS S3
 
+----------------------------------------
+
 ## Data Extraction
 
 - Built a scraper to gather general information about properties listed on Zillow after configuring the filters.
+-
+``` Python
 
-```
 import os
 
 from bs4 import BeautifulSoup
@@ -140,23 +156,242 @@ while x <= 10:
     x += 1
 
 
+```
 
+---------------------------------------------------------
+
+## Parameter Filters for Data to be Collected:
+- 750 sq. ft. < Sq. Footage < 7,500 sq. ft.
+- Built Year >= 1900
+- 1+ bedroom
+- The price range is set with a minimum between $100,000 and $300,000, depending on the approximate median home value of the searched metropolitan city. 
+
+![image](https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/91e041c5-cbcb-4345-aca9-dff7b72aaefc)
+
+----------------------------------------------------------
+
+## Data Preprocessing:
+
+1. Expand the initial raw data to create a number of rows based on the number of bedrooms the property has.
+
+`data_preproccesing.ipynb`
+``` Python 
+
+# create rows according to the value in column beds
+df['Beds'].value_counts()
+
+columns = ['Built Year', 'Room', 'Floor_Type']
+
+#insert new columns in columns to the df
+for i in columns:
+    df[i] = ''
+
+
+# randomize the order of the rows
+df = df.sample(frac=1).reset_index(drop=True)
+
+
+beds_to_room = {1: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Basement'],
+                2: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Basement'],
+                3: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Basement'],
+                4: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Basement'],
+                5: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                6: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                7: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                8: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                9: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                10: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                11: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                12: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement'],
+                13: ['Living', 'Dining', 'Family', 'Kitchen', 'Bed', 'Bed2', 'Bed3', 'Bed4', 'Bed_Others', 'Basement']}
+
+df['Room'] = df.groupby('ZPID')['Beds'].apply(lambda x: x.map(beds_to_room))
 
 ```
 
+2. Divide the dataframe into groups corresponding to the number of people who will be manually sorting the floor types.  
+   In this case, four people will be assigned to this task.
 
 
+   ``` Python
+    # divide the df into 4 parts
+    df1 = df.iloc[:int(df.shape[0]/5), :]
+    print(len(df1))
+    df1= df1.explode('Room')
+
+    df2 = df.iloc[int(df.shape[0]/5):int(df.shape[0]/5*2), :]
+    print(len(df2))
+    df2= df2.explode('Room')
+   
+    df3 = df.iloc[int(df.shape[0]/5*2):int(df.shape[0]/5*3.5), :]
+    print(len(df3))
+    df3= df3.explode('Room')
+
+    df4 = df.iloc[int(df.shape[0]/5*3.5):, :]
+    print(len(df4))
+    df4= df4.explode('Room')
+   ```
+
+3. Save the randomly split dataframe into Excel worksheets to distribute to the workers, with thick borders added around each property for the workers' convenience.
+
+``` Python
+
+from openpyxl.styles import Border, Side
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl import Workbook
+
+wb1 = Workbook()
+ws1 = wb1.active
+
+for r in dataframe_to_rows(df1, index=False, header=True):
+    ws1.append(r)
+
+# initialize the last_seen variable with None
+last_seen = None
+
+# set the border properties for the last cell with a unique ZPID
+for row in ws1.iter_rows(min_row=2, max_row=ws1.max_row, min_col=1, max_col=ws1.max_column):
+    current_zpid = row[0].value
+    if current_zpid != last_seen:
+        # if the current ZPID is different from the last seen ZPID, set the border for the last cell with the last seen ZPID
+        for cell in row[:]:
+            cell.border = Border(top=Side(style='thick'))
+    last_seen = current_zpid
 
 
+wb1.save('xxxx.xlsx')
 
-<img width="468" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/ba639dba-00b2-43c9-8384-96da815188d9">
+```
+output: 
 
-<img width="469" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/b9252244-8877-4bfa-90a0-56e909c47cc3">
+![image](https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/356a0e45-458d-4660-8030-5a7eb28476d3)
+
+### The reason 'Built Year' and 'Floor Type' cells are blank is:
+
+- Collecting built-year data automatically would have required an additional step, such as using a separate scraper. Therefore, I've figured it's not time-efficient to run an extra scraper solely for obtaining built-year data.
+- The floor type information can only be obtained manually by inspecting the pictures.
+
+Therefore, the two columns were left blank to be filled in by manual workers by accessing the hyperlinks provided.
+
+-----------------------------------------------------------
+## Data Analysis 
+
+### 1. Researched states represented in color fills by each region
+<img width="600" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/6f7102fb-e039-4aff-bb95-21de220f1e28">
+
+### 2. What the distribution of randomly collected data looks like
+![image](https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/df2d818f-33d5-476e-8666-36caf5d8d470)
 
 
+### 3. Choropleth Map: Median House Price and Avg. House Built-Years
+<img width="324" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/89788b12-46f0-4eb0-a84d-0c973111469a">
+<img width="325" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/fd88913f-a195-41fb-a7f9-92d2a0e0ec47">
 
-<img width="468" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/26bbeec4-42bd-4fa9-8270-5849a67154fc">
+### 4. Floor Type Distribution Results
 
-<img width="468" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/41e619d9-4c0f-460f-8164-361affa0a4d7">
+##### - Overall Floor Types by Each Room Type 
 
-<img width="468" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/76a49eb7-fc1e-49ed-8657-f1fca65ae86a">
+<img width="600" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/2f48c9f0-2890-4c34-a961-6d6b07228e56">
+
+
+##### - Bedrooms By Regions & States
+
+<img width="344" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/5981f1a0-c7bd-4e55-9704-554c8f0687b3">
+<img width="373" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/4c30ffdd-9edd-420b-b51d-101a351a32b3">
+<img width="352" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/ac7ec38c-32eb-4e30-8cf0-8e9c15c59fd4">
+
+##### - Bedrooms By Regions & Division: Midwest 
+<img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/ab2a89ec-e157-48d2-b237-9738a5c7f644">
+
+##### - Bedrooms By Regions & Division: Northeast
+<img width="699" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/a4a27a0d-605d-4f84-98fb-6de13aa3e482">
+
+##### - Bedrooms By Regions & Division: South
+<img width="713" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/2fe1565c-a56b-4f03-bfdd-266fc4c575d5">
+
+##### - Bedrooms By Regions & Division: West
+<img width="711" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8b39ba1e-ca74-4fd0-b44b-146058873a35">
+
+##### - Living Rooms By Regions & States
+<img width="717" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/07587a1e-a2f9-4b39-8daa-61c2d622de4a">
+
+##### - Living Rooms By Regions & Divisions: Midwest
+<img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/a1ab35e4-2d2a-4c25-b290-44b6b39ce4f2">
+
+##### - Living Rooms By Regions & Divisions: Northeast
+<img width="700" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/9f71e01e-e8f6-405c-8189-8d8649c1d9b0">
+
+##### - Living Rooms By Regions & Divisions: South
+<img width="713" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8e4c2fc7-e9bc-4ee8-a02f-1f36c432be63">
+
+##### - Living Rooms By Regions & Divisions: West
+<img width="714" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/c77a2e1e-e842-4fc5-8b46-425f6556b394">
+
+##### - Basements By Regions and States
+<img width="718" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/7ffc700c-eef9-4c5d-8348-0c316276b583">
+
+##### - Basements By Regions & Divisions: Midwest
+<img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/c12cab21-2a90-42c8-8bee-96f7894e1d97">
+
+##### - Basements By Regions & Divisions: Northeast
+<img width="700" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8b09a086-3ab3-4d01-8ea5-5e9269afd714">
+
+##### - Basements By Regions & Divisions: South
+<img width="713" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/16fe7bbd-e8c6-493e-a012-64a70ce624ce">
+
+##### - Basements By Regions & Divisions: West
+<img width="710" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/65626ff8-059c-4073-8a07-77f27726696e">
+
+##### - Other Rooms By Regions
+<img width="704" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/0d78400c-ab92-4b62-94e4-ba37f15d2ef0">
+
+##### - Home Type vs. Carpeted Bedrooms %
+<img width="598" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/b38cdced-3d83-47e4-89a9-7a6eb5233f41">
+
+##### - Built Year vs. Carpeted Bedrooms %
+<img width="583" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/c1dd81df-3799-4e1d-b78d-9a150e7dfbb3">
+
+
+##### - Built Year vs. Carpeted Bedrooms % : MIDWEST top 3 States
+
+`Illinois`
+<img width="426" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/e86ba39d-1c0a-41b5-9c13-793baa7c7d22">
+
+`Ohio`
+<img width="438" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8ec68954-0dde-4fa0-9e26-6e3073bce9c3">
+
+`Missouri` 
+<img width="438" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/4fa31bb6-30de-4c83-ba91-688a30c4467e">
+
+##### - Built Year vs. Carpeted Bedrooms % : NORTHEAST top 3 States
+
+`New York`
+<img width="401" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/3b80d387-c55f-4c26-95d5-f2aabb5ae93a">
+
+`New Jersey`
+<img width="428" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/224ea299-e801-4201-af6a-e0a55456e06c">
+
+`Massachusetts`
+<img width="415" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/d011d1a0-2172-40a4-8934-05e57c17355f">
+
+##### - Built Year vs. Carpeted Bedrooms % : WEST top 3 States
+
+`California`
+<img width="411" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/8f71c86e-b53a-4de9-98ba-be543c14b96a">
+
+`Arizona`
+<img width="411" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/7b7f3926-c419-4111-ad29-11f258b8dbe1">
+
+`Washington`
+<img width="417" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/6340a475-1b61-4b9a-8bb6-ca0b0ad8b49d">
+
+##### - Built Year vs. Carpeted Bedrooms % : SOUTH top 3 States
+
+`Texas`
+<img width="416" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/4942f507-8657-4502-a43e-eb7facffa4ad">
+
+`Florida`
+<img width="414" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/3b8a7a44-4b21-4c08-b591-336408ee1a1e">
+
+`Tennessee`
+<img width="416" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/e845fad5-93b9-4eb4-a634-5c8b4dcb89d5">
