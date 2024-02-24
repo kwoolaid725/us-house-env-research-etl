@@ -405,7 +405,7 @@ Therefore, the two columns were left blank to be filled in by manual workers by 
 `Tennessee`
 <img width="416" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/e845fad5-93b9-4eb4-a634-5c8b4dcb89d5">
 
----------------------------------------------------
+-----------------------------------------------------------
 ## Conclusions derived from analyzing the data
 
 Initially, I hypothesized that cold regions like the Northeast would generally have a higher ratio of carpeted floors, but the data suggested otherwise.
@@ -419,9 +419,9 @@ Possible reasons for it having more bare floor types, such as hardwood and tiles
 The above assumptions can also be supported by the fact that rapidly growing states like Texas and Arizona have a higher percentage of newer homes, resulting in a higher ratio of carpeted floors despite the hot climate.
 
 ----------------------------------------------------------------
-##  Key takeaways based on the conclusion
+## Key takeaways based on the conclusion 🗝️
 
-1. The regions with affluence and longer history seem to have a greater impact on floor types than the climate, thus targeted product development and marketing strategies are necessary.
-2. The ratio of houses with carpeted floors will not be decreasing any time soon, as newer homes are generally built with carpets. Therefore, it remains important to develop vacuum cleaners that can effectively clean carpets.
-3. The insight aligns with market data showing that upright vacuums still dominate higher market shares, as they are generally more capable and reliable in cleaning carpeted floors.
+- The regions with affluence and longer history seem to have a greater impact on floor types than the climate, thus targeted product development and marketing strategies are necessary.
+- The ratio of houses with carpeted floors will not be decreasing any time soon, as newer homes are generally built with carpets. Therefore, it remains important to develop vacuum cleaners that can effectively clean carpets.
+- The insight aligns with market data showing that upright vacuums still dominate higher market shares, as they are generally more capable and reliable in cleaning carpeted floors.
 
