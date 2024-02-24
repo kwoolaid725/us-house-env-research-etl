@@ -36,7 +36,7 @@ I implemented and executed ETL processes to significantly increase data collecti
 ## Data Extraction
 
 - Built a scraper to gather general information about properties listed on Zillow after configuring the filters.
--
+
 ``` Python
 
 import os
