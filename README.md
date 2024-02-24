@@ -293,12 +293,17 @@ Therefore, the two columns were left blank to be filled in by manual workers by 
 
 <img width="600" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/2f48c9f0-2890-4c34-a961-6d6b07228e56">
 
+- More than half of all bedrooms across the nation have carpeted floors (56%)
+- About half of all living rooms across the nation have rugs on top of the bare floors.
 
 ##### - Bedrooms By Regions & States
 
 <img width="344" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/5981f1a0-c7bd-4e55-9704-554c8f0687b3">
 <img width="373" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/4c30ffdd-9edd-420b-b51d-101a351a32b3">
 <img width="352" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/ac7ec38c-32eb-4e30-8cf0-8e9c15c59fd4">
+
+- Midwest region has the highest carpeted bedrooms ratio
+- Mountain states in West region also have significantly high carpeted bedrooms ratio
 
 ##### - Bedrooms By Regions & Division: Midwest 
 <img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/ab2a89ec-e157-48d2-b237-9738a5c7f644">
@@ -315,6 +320,8 @@ Therefore, the two columns were left blank to be filled in by manual workers by 
 ##### - Living Rooms By Regions & States
 <img width="717" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/07587a1e-a2f9-4b39-8daa-61c2d622de4a">
 
+- Midwest region has the highest living rooms ratios
+
 ##### - Living Rooms By Regions & Divisions: Midwest
 <img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/a1ab35e4-2d2a-4c25-b290-44b6b39ce4f2">
 
@@ -329,6 +336,8 @@ Therefore, the two columns were left blank to be filled in by manual workers by 
 
 ##### - Basements By Regions and States
 <img width="718" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/7ffc700c-eef9-4c5d-8348-0c316276b583">
+
+- West region has the highest carpeted basement ratio
 
 ##### - Basements By Regions & Divisions: Midwest
 <img width="705" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/c12cab21-2a90-42c8-8bee-96f7894e1d97">
@@ -395,3 +404,24 @@ Therefore, the two columns were left blank to be filled in by manual workers by 
 
 `Tennessee`
 <img width="416" alt="image" src="https://github.com/kwoolaid725/us-house-env-research-etl/assets/107806433/e845fad5-93b9-4eb4-a634-5c8b4dcb89d5">
+
+---------------------------------------------------
+## Conclusions derived from analyzing the data
+
+Initially, I hypothesized that cold regions like the Northeast would generally have a higher ratio of carpeted floors, but the data suggested otherwise.
+
+Possible reasons for it having more bare floor types, such as hardwood and tiles
+
+`i) The Northeast region has the oldest houses compared to other regions due to its long history of habitation.`
+
+`ii) The Northeast region has a higher proportion of wealthy households that can afford renovations, as hardwood floors are more expensive to install than carpeted floors.`
+
+The above assumptions can also be supported by the fact that rapidly growing states like Texas and Arizona have a higher percentage of newer homes, resulting in a higher ratio of carpeted floors despite the hot climate.
+
+----------------------------------------------------------------
+##  Key takeaways based on the conclusion
+
+1. The regions with affluence and longer history seem to have a greater impact on floor types than the climate, thus targeted product development and marketing strategies are necessary.
+2. The ratio of houses with carpeted floors will not be decreasing any time soon, as newer homes are generally built with carpets. Therefore, it remains important to develop vacuum cleaners that can effectively clean carpets.
+3. The insight aligns with market data showing that upright vacuums still dominate higher market shares, as they are generally more capable and reliable in cleaning carpeted floors.
+
