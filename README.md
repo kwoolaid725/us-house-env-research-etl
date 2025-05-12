@@ -1,5 +1,7 @@
 # Exploring Residential Environmental Data in the United States with a Focus on Floor Types
 
+![image](https://github.com/user-attachments/assets/ecddb31b-ff6a-4189-8490-0c8d599daffa)
+
 
 ## Project Overview
 
